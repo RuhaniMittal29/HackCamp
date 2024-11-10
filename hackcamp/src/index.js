@@ -2,9 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+
+import Home from "./components/HeroSection/hero";
+import Dashboard from './components/Dashboard/dashboard';
+import Resources from './components/Resources/resources';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <Router>
+        <Routes>
+          <Route exact path="/" element={<App customComponent={Home}/>}/>
+          <Route exact path="/dashboard" element={<App customComponent={Dashboard}/>}/>
+          <Route exact path="/resources" element={<App customComponent={Resources}/>}/>
+        </Routes>
+      </Router>
   </React.StrictMode>
 );

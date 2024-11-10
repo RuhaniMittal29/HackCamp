@@ -94,9 +94,9 @@
 /* Keyframes for the bird's circular movement */
 @keyframes flyAround {
     0% {
-        transform: translate(-50%, -50%) rotate(0deg) translateX(22rem) rotate(0deg); /* Padding of 2rem added here */
+        transform: translate(-50%, -50%) rotate(0deg) translateX(21rem) rotate(0deg); /* Padding of 2rem added here */
     }
     100% {
-        transform: translate(-50%, -50%) rotate(360deg) translateX(22rem) rotate(-360deg); /* Padding of 2rem added here */
+        transform: translate(-50%, -50%) rotate(360deg) translateX(21rem) rotate(-360deg); /* Padding of 2rem added here */
     }
 }
