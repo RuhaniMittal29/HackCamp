@@ -1,15 +1,22 @@
 .navbar {
     background-color: rgba(254, 251, 226, 0.6);
     backdrop-filter: blur(100px);
-    height: 3rem;
+    height: 4rem;
     width: 100dvw;
     margin: 0 auto;
     padding: 1rem 2rem;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     top: 0;
     z-index: 3;
+}
+
+.title {
+    font-family: "Pacifico", cursive;
+    font-weight: 100;
+    font-style: normal;
+    font-size: 2rem;
 }
 
 .desktopMenuListItem {
@@ -17,7 +24,7 @@
     font-family: 'Poppins', sans-serif;
     color: rgb(0, 0, 0);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 450;
     letter-spacing: 1.5px;
 }
 
@@ -29,4 +36,25 @@
 .active {
     font-weight: 350;
     color: white;
+}
+
+.button {
+    background: linear-gradient(#ffe5e6, hsl(358, 100%, 85%));
+    height: 3rem;
+    width: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.Sign-in {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 1px;
 }
