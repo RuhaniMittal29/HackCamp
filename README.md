@@ -1,2 +1,2 @@
 # HackCamp
-## Hi! I'm Ruhani
+## Welcome!! We are MKRG :)
