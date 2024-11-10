@@ -1,11 +1,10 @@
 import Navbar from "./components/Navbar/navbar";
-import Home from "./components/HeroSection/hero";
 
-function App() {
+function App({customComponent: CustomCompoent}) {
   return (
-    <div className="App">
+    <div>
       <Navbar/>
-      <Home/>
+      {CustomCompoent && <CustomCompoent/>}
     </div>
   );
 }
