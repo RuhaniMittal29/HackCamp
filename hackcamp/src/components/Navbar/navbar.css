@@ -1,5 +1,5 @@
 .navbar {
-    background-color: rgba(58, 58, 58, 0.23);
+    background-color: rgba(254, 251, 226, 0.6);
     backdrop-filter: blur(100px);
     height: 3rem;
     width: 100dvw;
@@ -17,13 +17,13 @@
     font-family: 'Poppins', sans-serif;
     color: rgb(0, 0, 0);
     text-decoration: none;
-    font-weight: 300;
+    font-weight: 500;
     letter-spacing: 1.5px;
 }
 
 .desktopMenuListItem:hover {
-    font-weight: 350;
-    color: white;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
 }
 
 .active {
