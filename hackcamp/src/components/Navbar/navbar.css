@@ -1,0 +1,32 @@
+.navbar {
+    background-color: rgba(254, 251, 226, 0.6);
+    backdrop-filter: blur(100px);
+    height: 3rem;
+    width: 100dvw;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    z-index: 3;
+}
+
+.desktopMenuListItem {
+    padding: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+}
+
+.desktopMenuListItem:hover {
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+}
+
+.active {
+    font-weight: 350;
+    color: white;
+}
