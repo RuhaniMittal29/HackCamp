@@ -1,11 +1,102 @@
 #Home {
     background-color: auto;
     color: rgb(0, 0, 0);
-    height: 100vh;
+    height: calc(100vh - 4rem);
     width: 100vw;
     margin: 0 auto;
     overflow: hidden;
-    position: relative;
     display: flex;
+    justify-content: center;
+    align-items: center; 
+    position: relative;
+}
+
+.circle-container {
+    position: relative;
+    width: 35rem;
+    height: 35rem;
+}
+
+/* Base styles for each quarter circle */
+.quarter-circle {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    border-radius: 0 100% 0 0;
+}
+
+/* Top-left quadrant */
+.top-left {
+    top: 0;
+    left: 0;
+    background-color: #FFDFE0;
+    border-radius: 100% 0 0 0;
+}
+
+/* Top-right quadrant */
+.top-right {
+    top: 0;
+    right: 0;
+    background-color: #EEDFFF;
+    border-radius: 0 100% 0 0;
+}
+
+/* Bottom-left quadrant */
+.bottom-left {
+    bottom: 0;
+    left: 0;
+    background-color: #EEDFFF;
+    border-radius: 0 0 0 100%;
+}
+
+/* Bottom-right quadrant */
+.bottom-right {
+    bottom: 0;
+    right: 0;
+    background-color: #E0FFDF;
+    border-radius: 0 0 100% 0;
+}
+
+/* Main inner circle */
+.main-circle {
+    width: 20rem;
+    height: 20rem;
+    background-color: #DFFDFF;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    display: flex;
+    justify-content: center;
     align-items: center;
+}
+
+.tree {
+    width: 20rem;
+
+}
+/* Bird Styles */
+.bird {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: flyAround 10s linear infinite;
+}
+
+/* Bird image styles */
+.bird-img {
+    width: 5rem;
+    height: auto;
+}
+
+/* Keyframes for the bird's circular movement */
+@keyframes flyAround {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg) translateX(22rem) rotate(0deg); /* Padding of 2rem added here */
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg) translateX(22rem) rotate(-360deg); /* Padding of 2rem added here */
+    }
 }
