@@ -1,7 +1,7 @@
 .dashboard {
   min-height: 100vh;
   padding: 2rem;
-  background-color: #FFFFEC;
+  background: linear-gradient(#faffe8, rgb(214, 239, 244));
 }
 
 .dashboard-container {

@@ -1,7 +1,7 @@
 #Home {
     background: linear-gradient(#faffe8, rgb(214, 239, 244));
     color: rgb(0, 0, 0);
-    height: calc(100vh - 4rem);
+    height: calc(100vh - 2rem);
     width: 100vw;
     margin: 0 auto;
     overflow: hidden;

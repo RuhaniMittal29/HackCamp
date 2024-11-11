@@ -70,8 +70,8 @@ const getStreakIcons = (metric, streak) => {
   const maxIcons = 7;
   const filledIcons = Math.min(streak, maxIcons);
   const emojis = {
-    water: '🥛',
-    sleep: '🌙',
+    water: '💧',
+    sleep: '😴',
     meals: '🍎',
     exercise: '🏋️'
   };

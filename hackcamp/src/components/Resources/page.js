@@ -67,61 +67,78 @@ export default function HealthArticles() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="lg">
-        <Box sx={{ my: 4 }}>
-          <Typography variant="h3" component="h1" gutterBottom align="center">
-            {/* sx={{
-                font-family: `Pacifico`;
-                font-weight: 100;
-                font-style: normal;
-                font-size: 2rem;
-            
-            }} */}
-            Health & Wellness Articles
-          </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-            <TextField
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              placeholder="Search articles"
-              variant="outlined"
-              sx={{ width: '100%', maxWidth: 400 }}
-            />
-          </Box>
-          {isLoading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <CircularProgress />
+      <Box 
+        sx={{ 
+          background: 'linear-gradient(#faffe8, rgb(214, 239, 244))',
+          minHeight: '100vh',
+          width: '100%',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          overflowY: 'auto',
+          paddingY: 4
+        }}
+      >
+        <Container maxWidth="lg">
+          <Box sx={{ my: 4 }}>
+            <Typography 
+              variant="h3" 
+              component="h1" 
+              gutterBottom 
+              align="center" 
+              sx={{
+                fontFamily: '"Pacifico", cursive',
+                fontWeight: 100,
+                fontStyle: 'normal',
+                fontSize: '3rem',
+              }}
+            >
+              Health & Wellness Articles
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+              <TextField
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder="Search articles"
+                variant="outlined"
+                sx={{ width: '100%', maxWidth: 400 }}
+              />
             </Box>
-          ) : (
-            <Grid container spacing={3}>
-              {articles.map((article, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {article.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {article.summary}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button 
-                        size="small" 
-                        color="primary" 
-                        onClick={() => window.open(article.url, '_blank')}
-                        aria-label={`Read more about ${article.title}`}
-                      >
-                        Read More
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          )}
-        </Box>
-      </Container>
+            {isLoading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Grid container spacing={3}>
+                {articles.map((article, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      <CardContent sx={{ flexGrow: 1 }}>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {article.title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {article.summary}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button 
+                          size="small" 
+                          color="primary" 
+                          onClick={() => window.open(article.url, '_blank')}
+                          aria-label={`Read more about ${article.title}`}
+                        >
+                          Read More
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+          </Box>
+        </Container>
+      </Box>
     </ThemeProvider>
   )
 }
