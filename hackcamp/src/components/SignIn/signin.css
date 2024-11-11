@@ -1,0 +1,96 @@
+/* src/components/SignIn/signin.css */
+
+.signin-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background-color: #fdfde9;
+    min-height: 100vh;
+  }
+  
+  .signin-tagline {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 3  rem;
+    padding-top: 5rem;
+    color: #333;
+    max-width: 800px; /* Increase the max-width to allow more words per line */
+    font-family: "Poppins", "sans-serif";
+  }
+  
+  .signin-container {
+    width: 100%;
+    max-width: 400px; /* Adjust this value for broader width */
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .signin-title {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .signin-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .signin-field {
+    margin-bottom: 1rem;
+  }
+  
+  .signin-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  .signin-button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    background-color: #66cc8a;
+    color: white;
+    transition: opacity 0.3s ease;
+  }
+  
+  .signin-google, .signin-apple {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .signin-google {
+    background-color: #4285f4;
+  }
+  
+  .signin-apple {
+    background-color: #000;
+  }
+  
+  .toggle-option {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .error-message, .success-message {
+    font-size: 0.875rem;
+    color: red;
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
