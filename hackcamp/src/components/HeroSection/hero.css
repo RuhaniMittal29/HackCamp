@@ -112,7 +112,7 @@
 
 .text-box {
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.579);
+    background-color: rgba(33, 37, 100, 0.579);
     color: white;
     font-size: 1rem;
     padding: 2.5rem 2.5rem;

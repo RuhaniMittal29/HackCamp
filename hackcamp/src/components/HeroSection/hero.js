@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-scroll';
 import './hero.css';
 import Tree from "../../assets/tree.png";
 import Bird from "../../assets/image.png";
@@ -6,6 +7,7 @@ import Water from "../../assets/water-home.png";
 import Sleep from "../../assets/sleep-home.png";
 import Food from "../../assets/food-home.png";
 import Fitness from "../../assets/fitness-home.png";
+import About from "../../components/About/about";
 
 const HeroSection = () => {
 
@@ -37,7 +39,9 @@ const HeroSection = () => {
                     </div>
             </div>
             <div className="main-circle">
-                <img src={Tree} alt="tree" className="tree" />
+                    <Link to="About" smooth={true} duration={500}>
+                        <img src={Tree} alt="tree" className="tree" style={{ cursor: 'pointer' }} />
+                    </Link>
             </div>
             <div className="bird">
                 <img src={Bird} alt="bird" className="bird-img" />
