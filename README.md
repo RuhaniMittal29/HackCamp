@@ -11,13 +11,13 @@ This is where WellSpring comes in. Our goal is to make health tracking simple, a
 
 Here is a guide on how to use the various pages on the site:
 
-### Tracking 📈
+### Home 📈
 
-The Tracking page, also known as the Home page, allows you to track each of your health attributes. You can achieve this using the health wheel by clicking on one of the quadrants.
+The Home page shows you everything you need to know about each of the health attributes WellSpring focuses on. You can also view our mission statement on this page.
 
 ### Dashboard 📍
 
-The Dashboard can be accessed via the navigation bar at the top. It provides a day-by-day summary of your health stats in each category.
+The Dashboard can be accessed via the navigation bar at the top. It provides a day-by-day summary of your health stats in each category. This is also where you can input your daily health stats.
 
 ### Resources 📋
 
