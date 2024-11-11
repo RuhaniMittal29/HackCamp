@@ -1,30 +1,5 @@
 import { useState, useEffect } from 'react';
-// import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import './dashboard.css';
-
-// Icons can be imported from a package like react-icons or defined as SVG components
-const Icons = {
-  Droplet: () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-    </svg>
-  ),
-  Moon: () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-  ),
-  Utensils: () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 17h18M3 12h18M3 7h18"/>
-    </svg>
-  ),
-  Activity: () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-    </svg>
-  )
-};
 
 const PASTEL_COLORS = {
   water: '#A8E6CF',
@@ -33,128 +8,86 @@ const PASTEL_COLORS = {
   exercise: '#FFAAA5'
 };
 
-const getMetricIcon = (metric) => {
-  switch (metric) {
-    case 'water':
-      return <Icons.Droplet />;
-    case 'sleep':
-      return <Icons.Moon />;
-    case 'meals':
-      return <Icons.Utensils />;
-    case 'exercise':
-      return <Icons.Activity />;
-    default:
-      return null;
-  }
-};
-
-const getMetricUnit = (metric) => {
-  const units = {
-    water: 'glasses',
-    sleep: 'hours',
-    meals: 'meals',
-    exercise: 'minutes'
-  };
-  return units[metric] || '';
-};
-
-const getStreakIcons = (metric, streak) => {
-  const icons = [];
-  const maxIcons = 7;
-  const filledIcons = Math.min(streak, maxIcons);
-  const emojis = {
-    water: '🥛',
-    sleep: '🌙',
-    meals: '🍎',
-    exercise: '🏋️'
-  };
-
-  for (let i = 0; i < maxIcons; i++) {
-    icons.push(
-      <span 
-        key={i} 
-        className={`streak-icon ${i < filledIcons ? 'active' : ''}`}
-      >
-        {emojis[metric]}
-      </span>
-    );
-  }
-  return icons;
-};
-
 function WellnessDashboard() {
-  const [activeMetric, setActiveMetric] = useState('water');
   const [metricData, setMetricData] = useState({
     water: [],
     exercise: [],
     sleep: [],
     meals: []
-  })
+  });
+  const [chartUrls, setChartUrls] = useState({});
 
   useEffect(() => {
+    // Retrieve and set metric data from localStorage
     const updatedData = {};
     ['water', 'exercise', 'sleep', 'meals'].forEach(type => {
       const val = JSON.parse(localStorage.getItem(type)) || [];
-      updatedData[type] = val; // Add each retrieved value to updatedData object
+      updatedData[type] = val.map(Number); // Convert each entry to a number
     });
-    
     setMetricData(updatedData);
-  }, [])
 
-  const getStreakCount = (metric) => {
-    const data = metricData[metric];
-    let streak = 0;
-    const targets = { water: 8, sleep: 7, meals: 3, exercise: 30 };
-    
-    for (let i = data.length - 1; i >= 0; i--) {
-      if (data[i].value >= targets[metric]) {
-        streak++;
-      } else {
-        break;
+    // Generate chart URLs using QuickChart
+    const newChartUrls = {};
+    ['water', 'exercise', 'sleep', 'meals'].forEach(metric => {
+      newChartUrls[metric] = generateChartUrl(metric, updatedData[metric]);
+    });
+    setChartUrls(newChartUrls);
+  }, []);
+
+  // Function to generate a QuickChart URL for a given metric and its data
+  const generateChartUrl = (metric, data) => {
+    const chartConfig = {
+      type: 'bar',
+      data: {
+        labels: Array.from({ length: data.length }, (_, i) => `Day ${i + 1}`),
+        datasets: [
+          {
+            label: `${metric.charAt(0).toUpperCase() + metric.slice(1)} Intake`,
+            data: data,
+            backgroundColor: PASTEL_COLORS[metric],
+            borderColor: PASTEL_COLORS[metric],
+            borderWidth: 2,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        title: {
+          display: true,
+          text: `${metric.charAt(0).toUpperCase() + metric.slice(1)} Intake Over Time`
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
       }
-    }
-    return streak;
-  };
+    };
 
-  const getMonthlyAverage = (metric) => {
-    const data = metricData[metric];
-    const sum = data.reduce((acc, day) => acc + day.value, 0);
-    return (sum / data.length).toFixed(1);
-  };
-
-  const getWeeklyData = (metric) => {
-    return metricData[metric].slice(-7);
-  };
-
-  const getMonthlyPieData = (metric) => {
-    const data = metricData[metric];
-    const targets = { water: 8, sleep: 7, meals: 3, exercise: 30 };
-    const target = targets[metric];
-    const metTarget = data.filter(day => day.value >= target).length;
-    const belowTarget = data.length - metTarget;
-    return [
-      { name: 'Met Target', value: metTarget },
-      { name: 'Below Target', value: belowTarget }
-    ];
+    const chartConfigString = encodeURIComponent(JSON.stringify(chartConfig));
+    return `https://quickchart.io/chart?c=${chartConfigString}`;
   };
 
   return (
-    <>
+    <div className="dashboard">
+      <h2>Your Wellness Dashboard</h2>
       {Object.entries(metricData).map(([metric, values]) => (
-        <div key={metric} style={{ marginBottom: '1rem' }}>
+        <div key={metric} className="metric-section">
           <h3>{metric.charAt(0).toUpperCase() + metric.slice(1)}</h3>
           {values.length > 0 ? (
-            <ul>
-              {values.map((value, index) => (
-                <li key={index}>{value}</li>
-              ))}
-            </ul>
+            <img
+              src={chartUrls[metric]}
+              alt={`${metric} intake chart`}
+              className="metric-chart"
+            />
           ) : (
             <p>No data available</p>
           )}
         </div>
       ))}
-    </>
+    </div>
+  
+
     // <div className="dashboard">
     //   <div className="dashboard-container">
     //     <h1 className="dashboard-title">Wellness Dashboard</h1>

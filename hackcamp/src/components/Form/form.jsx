@@ -1,53 +1,79 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
+import Navbar from "../Navbar/navbar";
+import "./form.css";
 
 const CustomForm = () => {
     const formRef = useRef(null);
-
     const [formData, setFormData] = useState({
         water: '',
         exercise: '',
         sleep: '',
         meals: ''
-    })
+    });
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData((prevData) => ({
-          ...prevData,
-          [name]: value,
+            ...prevData,
+            [name]: value,
         }));
     };
 
     const handleSubmit = (event) => {
-        event.preventDefault(); // Prevent the default form submission behavior
-        
+        event.preventDefault();
         ['water', 'exercise', 'sleep', 'meals'].forEach(type => {
-            // Get the value from localStorage
-            const lsValue = JSON.parse(localStorage.getItem(type)) || []; // Parse the stored JSON or default to an empty array
-            
-            // Update the array with the new value from formData
+            const lsValue = JSON.parse(localStorage.getItem(type)) || [];
             const updatedArray = [...lsValue, formData[type]];
-          
-            // Store the updated array back to localStorage
-            localStorage.setItem(type, JSON.stringify(updatedArray)); // Convert the array to JSON for storage
-          });
+            localStorage.setItem(type, JSON.stringify(updatedArray));
+        });
     };
 
     return (
-        <>
-            <form ref={formRef} onSubmit={handleSubmit}>
-                <input type="text" name="water" value={formData.water}
-            onChange={handleInputChange} placeholder="Water" />
-                <input type="text" name="exercise" value={formData.exercise}
-            onChange={handleInputChange} placeholder="Exercise" />
-                <input type="text" name="sleep" value={formData.sleep}
-            onChange={handleInputChange} placeholder="Sleep" />
-                <input type="text" name="meals" value={formData.meals}
-            onChange={handleInputChange} placeholder="Meals" />
-            <button type="submit">submit</button>
-            </form>
-        </>
-  )
-}
+        <div>
+            <Navbar />
+            <div className="form-page">
+                <h2 className="form-tagline">Track your wellness journey – enter your daily stats below!</h2>
+                <div className="form-container">
+                    <h2 className="form-title">Daily Wellness Form</h2>
+                    <form className="form-content" onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            name="water"
+                            value={formData.water}
+                            onChange={handleInputChange}
+                            placeholder="Water Intake (liters)"
+                            className="form-input"
+                        />
+                        <input
+                            type="text"
+                            name="exercise"
+                            value={formData.exercise}
+                            onChange={handleInputChange}
+                            placeholder="Exercise (minutes)"
+                            className="form-input"
+                        />
+                        <input
+                            type="text"
+                            name="sleep"
+                            value={formData.sleep}
+                            onChange={handleInputChange}
+                            placeholder="Sleep (hours)"
+                            className="form-input"
+                        />
+                        <input
+                            type="text"
+                            name="meals"
+                            value={formData.meals}
+                            onChange={handleInputChange}
+                            placeholder="Meals (count)"
+                            className="form-input"
+                        />
+                        <button type="submit" className="form-button">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+};
 
-export default CustomForm
+export default CustomForm;
