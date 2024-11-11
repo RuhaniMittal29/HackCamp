@@ -76,7 +76,7 @@ export default function HealthArticles() {
           top: 0,
           left: 0,
           overflowY: 'auto',
-          paddingY: 4
+          paddingY: 10
         }}
       >
         <Container maxWidth="lg">
