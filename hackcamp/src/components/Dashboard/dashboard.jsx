@@ -132,7 +132,7 @@ function WellnessDashboard() {
   return (
     <div className="dashboard">
       <div className="dashboard-container">
-        <h1 className="dashboard-title">Wellness Dashboard</h1>
+        <h1 className="dashboard-title">Dashboard</h1>
 
         <div className="metric-buttons">
           {['water', 'sleep', 'meals', 'exercise'].map((metric) => (

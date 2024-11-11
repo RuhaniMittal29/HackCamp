@@ -14,7 +14,6 @@ const Navbar = () => {
                     <Link activeClass="active" onClick={()=>navigate("/")} className="desktopMenuListItem">HOME</Link>
                     <Link activeClass="active" onClick={()=>navigate("/dashboard")} className="desktopMenuListItem">DASHBOARD</Link>
                     <Link activeClass="active" onClick={()=>navigate("/resources")} className="desktopMenuListItem">RESOURCES</Link>
-                    <Link activeClass="active" to="" className="desktopMenuListItem">SAY HELLO ;)</Link>
                 </div>
             <div className="button">
                 <span className="Sign-in">SIGN IN</span>

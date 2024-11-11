@@ -59,8 +59,8 @@
 
 /* Main inner circle */
 .main-circle {
-    width: 20rem;
-    height: 20rem;
+    width: 17rem;
+    height: 17rem;
     background-color: #DFFDFF;
     border-radius: 50%;
     position: absolute;
@@ -73,7 +73,8 @@
 }
 
 .tree {
-    width: 20rem;
+    width: 17rem;
+    opacity: 0.8;
 
 }
 /* Bird Styles */
@@ -99,4 +100,13 @@
     100% {
         transform: translate(-50%, -50%) rotate(360deg) translateX(21rem) rotate(-360deg); /* Padding of 2rem added here */
     }
+}
+
+.quarter-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6.5rem; /* Adjust the width as necessary */
+    height: auto;
 }
