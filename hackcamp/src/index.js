@@ -5,7 +5,7 @@ import App from './App';
 
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
-import Home from "./components/HeroSection/hero";
+import Home from "./components/Home/home";
 import Dashboard from './components/Dashboard/dashboard';
 import Resources from './components/Resources/resources';
 

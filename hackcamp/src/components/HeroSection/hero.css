@@ -1,5 +1,5 @@
 #Home {
-    background-color: auto;
+    background: linear-gradient(#faffe8, rgb(214, 239, 244));
     color: rgb(0, 0, 0);
     height: calc(100vh - 4rem);
     width: 100vw;
@@ -53,7 +53,7 @@
 .bottom-right {
     bottom: 0;
     right: 0;
-    background-color: #E0FFDF;
+    background-color: #d7fee5;
     border-radius: 0 0 100% 0;
 }
 
@@ -74,7 +74,6 @@
 
 .tree {
     width: 17rem;
-    opacity: 0.8;
 
 }
 /* Bird Styles */
@@ -109,4 +108,51 @@
     transform: translate(-50%, -50%);
     width: 6.5rem; /* Adjust the width as necessary */
     height: auto;
+}
+
+.text-box {
+    position: absolute;
+    background-color: rgba(33, 37, 100, 0.579);
+    color: white;
+    font-size: 1rem;
+    padding: 2.5rem 2.5rem;
+    border-radius: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    width: 25rem;
+    text-align: center;
+    z-index: 100;
+}
+
+.text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+
+/* Show text box when hovering over quadrant */
+.quarter-circle:hover .text-box {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Specific styles for Food and Water */
+.food-water .text-box {
+    left: -150%; /* Position the text box on the left side */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Specific styles for Sleep and Fitness */
+.sleep-fitness .text-box {
+    right: -150%; /* Position the text box on the right side */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.text-box p {
+    margin: 0;
+    font-size: 0.9rem;
 }
