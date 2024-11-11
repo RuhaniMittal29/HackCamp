@@ -8,7 +8,7 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 import Home from "./components/HeroSection/hero";
 import Dashboard from './components/Dashboard/dashboard';
-import Resources from './components/Resources/resources';
+import Resources from './components/Resources/page';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
