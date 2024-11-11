@@ -9,6 +9,7 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Home from "./components/Home/home";
 import Dashboard from './components/Dashboard/dashboard';
 import Resources from './components/Resources/page';
+import Form from './components/Form/form';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route exact path="/" element={<App customComponent={Home}/>}/>
           <Route exact path="/dashboard" element={<App customComponent={Dashboard}/>}/>
           <Route exact path="/resources" element={<App customComponent={Resources}/>}/>
+          <Route exact path="/form" element={<App customComponent={Form}/>}/>
           <Route exact path="/signin" element={<SignInPage />} />
         </Routes>
       </Router>

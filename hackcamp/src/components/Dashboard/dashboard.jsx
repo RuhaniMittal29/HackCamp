@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import './dashboard.css';
 
-const PASTEL_COLORS = {
-  water: '#A8E6CF',
-  sleep: '#DCEDC1',
-  meals: '#FFD3B6',
-  exercise: '#FFAAA5'
-};
-
+// Icons can be imported from a package like react-icons or defined as SVG components
 const Icons = {
   Droplet: () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -31,14 +26,33 @@ const Icons = {
   )
 };
 
+const PASTEL_COLORS = {
+  water: '#A8E6CF',
+  sleep: '#DCEDC1',
+  meals: '#FFD3B6',
+  exercise: '#FFAAA5'
+};
+
+const wellnessData = {
+  water: Array.from({ length: 30 }, (_, i) => ({ date: `Day ${i + 1}`, value: Math.floor(Math.random() * 10) + 1 })),
+  sleep: Array.from({ length: 30 }, (_, i) => ({ date: `Day ${i + 1}`, value: Math.floor(Math.random() * 4) + 5 })),
+  meals: Array.from({ length: 30 }, (_, i) => ({ date: `Day ${i + 1}`, value: Math.floor(Math.random() * 3) + 1 })),
+  exercise: Array.from({ length: 30 }, (_, i) => ({ date: `Day ${i + 1}`, value: Math.floor(Math.random() * 60) + 15 }))
+};
+
 const getMetricIcon = (metric) => {
-  const IconComponent = Icons[{
-    water: 'Droplet',
-    sleep: 'Moon',
-    meals: 'Utensils',
-    exercise: 'Activity'
-  }[metric]];
-  return IconComponent ? <IconComponent /> : null;
+  switch (metric) {
+    case 'water':
+      return <Icons.Droplet />;
+    case 'sleep':
+      return <Icons.Moon />;
+    case 'meals':
+      return <Icons.Utensils />;
+    case 'exercise':
+      return <Icons.Activity />;
+    default:
+      return null;
+  }
 };
 
 const getMetricUnit = (metric) => {
@@ -51,103 +65,40 @@ const getMetricUnit = (metric) => {
   return units[metric] || '';
 };
 
-const getMetricLabel = (metric) => {
-  const labels = {
-    water: 'Water Intake',
-    sleep: 'Sleep Duration',
-    meals: 'Healthy Meals',
-    exercise: 'Exercise Duration'
+const getStreakIcons = (metric, streak) => {
+  const icons = [];
+  const maxIcons = 7;
+  const filledIcons = Math.min(streak, maxIcons);
+  const emojis = {
+    water: '💧',
+    sleep: '😴',
+    meals: '🍎',
+    exercise: '🏋️'
   };
-  return labels[metric] || metric;
+
+  for (let i = 0; i < maxIcons; i++) {
+    icons.push(
+      <span 
+        key={i} 
+        className={`streak-icon ${i < filledIcons ? 'active' : ''}`}
+      >
+        {emojis[metric]}
+      </span>
+    );
+  }
+  return icons;
 };
 
 function WellnessDashboard() {
   const [activeMetric, setActiveMetric] = useState('water');
-  const [wellnessData, setWellnessData] = useState(() => {
-    const savedData = localStorage.getItem('wellnessData');
-    if (savedData) {
-      return JSON.parse(savedData);
-    }
-    return {};
-  });
-  const [todayInputs, setTodayInputs] = useState({
-    water: [],
-    sleep: [],
-    meals: [],
-    exercise: []
-  });
-
-  useEffect(() => {
-    localStorage.setItem('wellnessData', JSON.stringify(wellnessData));
-  }, [wellnessData]);
-
-  const formatDate = (date) => {
-    return date.toISOString().split('T')[0];
-  };
-
-  const getToday = () => formatDate(new Date());
-
-  const handleInputChange = (metric, value) => {
-    setTodayInputs(prev => ({
-      ...prev,
-      [metric]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const today = getToday();
-    
-    const newData = { ...wellnessData };
-    Object.keys(todayInputs).forEach(metric => {
-      if (!newData[metric]) {
-        newData[metric] = [];
-      }
-      // Remove existing entry for today if it exists
-      newData[metric] = newData[metric].filter(entry => entry.date !== today);
-      // Add new entry
-      if (todayInputs[metric] !== '') {
-        newData[metric].push({
-          date: today,
-          value: parseFloat(todayInputs[metric])
-        });
-      }
-    });
-
-    setWellnessData(newData);
-    setTodayInputs({
-      water: '',
-      sleep: '',
-      meals: '',
-      exercise: ''
-    });
-  };
-
-  const getLast7Days = (metric) => {
-    const data = wellnessData[metric] || [];
-    return data.slice(-7);
-  };
-
-  const getMetricProgress = (metric) => {
-    const data = wellnessData[metric] || [];
-    if (data.length === 0) return 0;
-
-    const targets = { water: 8, sleep: 7, meals: 3, exercise: 30 };
-    const target = targets[metric];
-    const metTarget = data.filter(day => day.value >= target).length;
-    return Math.round((metTarget / data.length) * 100);
-  };
 
   const getStreakCount = (metric) => {
-    const data = wellnessData[metric] || [];
-    if (data.length === 0) return 0;
-
+    const data = wellnessData[metric];
     let streak = 0;
     const targets = { water: 8, sleep: 7, meals: 3, exercise: 30 };
-    const sortedData = [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
     
-    for (let i = 0; i < sortedData.length; i++) {
-      if (sortedData[i].value >= targets[metric]) {
+    for (let i = data.length - 1; i >= 0; i--) {
+      if (data[i].value >= targets[metric]) {
         streak++;
       } else {
         break;
@@ -157,48 +108,31 @@ function WellnessDashboard() {
   };
 
   const getMonthlyAverage = (metric) => {
-    const data = wellnessData[metric] || [];
-    if (data.length === 0) return 0;
-    
+    const data = wellnessData[metric];
     const sum = data.reduce((acc, day) => acc + day.value, 0);
     return (sum / data.length).toFixed(1);
+  };
+
+  const getWeeklyData = (metric) => {
+    return wellnessData[metric].slice(-7);
+  };
+
+  const getMonthlyPieData = (metric) => {
+    const data = wellnessData[metric];
+    const targets = { water: 8, sleep: 7, meals: 3, exercise: 30 };
+    const target = targets[metric];
+    const metTarget = data.filter(day => day.value >= target).length;
+    const belowTarget = data.length - metTarget;
+    return [
+      { name: 'Met Target', value: metTarget },
+      { name: 'Below Target', value: belowTarget }
+    ];
   };
 
   return (
     <div className="dashboard">
       <div className="dashboard-container">
-        <h1 className="dashboard-title">Wellness Dashboard</h1>
-
-        {/* Input Form */}
-        <div className="card input-card">
-          <div className="card-content">
-            <h2 className="card-title">Log Today's Activities</h2>
-            <form onSubmit={handleSubmit} className="input-form">
-              <div className="input-grid">
-                {['water', 'sleep', 'meals', 'exercise'].map((metric) => (
-                  <div key={metric} className="input-group">
-                    <label htmlFor={metric} className="input-label">
-                      {getMetricLabel(metric)} ({getMetricUnit(metric)})
-                    </label>
-                    <input
-                      type="number"
-                      id={metric}
-                      value={todayInputs[metric]}
-                      onChange={(e) => handleInputChange(metric, e.target.value)}
-                      placeholder={`Enter ${metric} amount`}
-                      min="0"
-                      step={metric === 'sleep' ? "0.5" : "1"}
-                      className="metric-input"
-                    />
-                  </div>
-                ))}
-              </div>
-              <button type="submit" className="submit-button">
-                Log Today's Progress
-              </button>
-            </form>
-          </div>
-        </div>
+        <h1 className="dashboard-title">Dashboard</h1>
 
         <div className="metric-buttons">
           {['water', 'sleep', 'meals', 'exercise'].map((metric) => (
@@ -220,18 +154,18 @@ function WellnessDashboard() {
             <div className="card-content">
               <h2 className="card-title">Weekly Progress</h2>
               <div className="weekly-chart">
-                {getLast7Days(activeMetric).map((day, index) => (
+                {getWeeklyData(activeMetric).map((day, index) => (
                   <div key={index} className="bar-container">
                     <div className="bar-wrapper">
                       <div 
                         className="bar-fill"
                         style={{
-                          height: `${(day.value / Math.max(...getLast7Days(activeMetric).map(d => d.value))) * 100}%`,
+                          height: `${(day.value / Math.max(...getWeeklyData(activeMetric).map(d => d.value))) * 100}%`,
                           backgroundColor: PASTEL_COLORS[activeMetric]
                         }}
                       ></div>
                     </div>
-                    <span className="bar-label">{11}</span>
+                    <span className="bar-label">{day.date.slice(-2)}</span>
                   </div>
                 ))}
               </div>
@@ -241,36 +175,23 @@ function WellnessDashboard() {
           <div className="card">
             <div className="card-content">
               <h2 className="card-title">Monthly Progress</h2>
-              <div className="progress-chart-container">
-                <div className="circle-progress">
-                  <svg width="100" height="100" viewBox="0 0 100 100">
-                    <circle
-                      className="circle-bg"
-                      cx="50"
-                      cy="50"
-                      r="40"
-                      fill="none"
-                      stroke="#E0E0E0"
-                      strokeWidth="8"
-                    />
-                    <circle
-                      className="circle-progress-bar"
-                      cx="50"
-                      cy="50"
-                      r="40"
-                      fill="none"
-                      stroke={PASTEL_COLORS[activeMetric]}
-                      strokeWidth="8"
-                      strokeDasharray={2 * Math.PI * 40}
-                      strokeDashoffset={2 * Math.PI * 40 * (1 - getMetricProgress(activeMetric) / 100)}
-                      transform="rotate(-90 50 50)"
-                    />
-                    <text x="50" y="50" textAnchor="middle" dy=".3em" className="circle-text">
-                      {getMetricProgress(activeMetric)}%
-                    </text>
-                  </svg>
-                </div>
-                <div className="progress-label">of days met target</div>
+              <div className="pie-chart">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={getMonthlyPieData(activeMetric)}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      fill={PASTEL_COLORS[activeMetric]}
+                      dataKey="value"
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    >
+                      <Cell key="cell-0" fill={PASTEL_COLORS[activeMetric]} />
+                      <Cell key="cell-1" fill="#E0E0E0" />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
@@ -279,9 +200,10 @@ function WellnessDashboard() {
             <div className="card-content">
               <h2 className="card-title">Current Streak</h2>
               <div className="streak-container">
-                <div className="streak-value">
-                  {getStreakCount(activeMetric)} days
+                <div className="streak-icons">
+                  {getStreakIcons(activeMetric, getStreakCount(activeMetric))}
                 </div>
+                <div className="streak-count">{getStreakCount(activeMetric)} days</div>
                 <div className="streak-message">
                   Keep up your {activeMetric} streak!
                 </div>
@@ -303,6 +225,27 @@ function WellnessDashboard() {
                   {getMetricUnit(activeMetric)} per day
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card overview-card">
+          <div className="card-content">
+            <h2 className="card-title">Overview</h2>
+            <div className="overview-grid">
+              {['water', 'sleep', 'meals', 'exercise'].map((metric) => (
+                <div key={metric} className="overview-item">
+                  <div 
+                    className="overview-icon"
+                    style={{ backgroundColor: PASTEL_COLORS[metric] }}
+                  >
+                    {getMetricIcon(metric)}
+                  </div>
+                  <div className="overview-metric">{metric.charAt(0).toUpperCase() + metric.slice(1)}</div>
+                  <div className="overview-value">{getMonthlyAverage(metric)}</div>
+                  <div className="overview-unit">{getMetricUnit(metric)} per day</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
