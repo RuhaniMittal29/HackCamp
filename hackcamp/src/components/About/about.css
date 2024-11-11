@@ -1,0 +1,32 @@
+#About {
+    background: rgb(214, 239, 244);
+    height: 37vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main {
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Change this to center the entire content */
+    gap: 1.5rem;
+}
+
+.about-title {
+    color: rgb(33, 37, 100);
+    font-size: 3rem;
+    font-weight: bold;
+    font-family: "Pacifico", cursive;
+    font-weight: 100;
+    font-style: normal;
+    text-align: center; /* Ensures the text is centered */
+}
+
+.about-content {
+    text-align: center; /* Centers the text within the span */
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
