@@ -13,7 +13,6 @@ const Navbar = () => {
                 <NavLink to="/" className="desktopMenuListItem" activeClassName="active">HOME</NavLink>
                 <NavLink to="/dashboard" className="desktopMenuListItem" activeClassName="active">DASHBOARD</NavLink>
                 <NavLink to="/resources" className="desktopMenuListItem" activeClassName="active">RESOURCES</NavLink>
-                <NavLink to="/contact" className="desktopMenuListItem" activeClassName="active">SAY HELLO ;)</NavLink>
             </div>
             <div className="button" onClick={() => navigate("/signin")}>
                 <span className="Sign-in">SIGN IN</span>
