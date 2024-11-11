@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+// import React, {useState} from "react";
 import './hero.css';
-import { Link } from 'react-scroll';
+// import { Link } from 'react-scroll';
 import Tree from "../../assets/tree.png";
 import Bird from "../../assets/image.png";
 

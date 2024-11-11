@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { useState, useEffect } from 'react';
+// import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import './dashboard.css';
 
 // Icons can be imported from a package like react-icons or defined as SVG components
@@ -31,13 +31,6 @@ const PASTEL_COLORS = {
   sleep: '#DCEDC1',
   meals: '#FFD3B6',
   exercise: '#FFAAA5'
-};
-
-const wellnessData = {
-  water: Array.from({ length: 30 }, (_, i) => ({ date: `Day ${i + 1}`, value: Math.floor(Math.random() * 10) + 1 })),
-  sleep: Array.from({ length: 30 }, (_, i) => ({ date: `Day ${i + 1}`, value: Math.floor(Math.random() * 4) + 5 })),
-  meals: Array.from({ length: 30 }, (_, i) => ({ date: `Day ${i + 1}`, value: Math.floor(Math.random() * 3) + 1 })),
-  exercise: Array.from({ length: 30 }, (_, i) => ({ date: `Day ${i + 1}`, value: Math.floor(Math.random() * 60) + 15 }))
 };
 
 const getMetricIcon = (metric) => {
@@ -91,9 +84,25 @@ const getStreakIcons = (metric, streak) => {
 
 function WellnessDashboard() {
   const [activeMetric, setActiveMetric] = useState('water');
+  const [metricData, setMetricData] = useState({
+    water: [],
+    exercise: [],
+    sleep: [],
+    meals: []
+  })
+
+  useEffect(() => {
+    const updatedData = {};
+    ['water', 'exercise', 'sleep', 'meals'].forEach(type => {
+      const val = JSON.parse(localStorage.getItem(type)) || [];
+      updatedData[type] = val; // Add each retrieved value to updatedData object
+    });
+    
+    setMetricData(updatedData);
+  }, [])
 
   const getStreakCount = (metric) => {
-    const data = wellnessData[metric];
+    const data = metricData[metric];
     let streak = 0;
     const targets = { water: 8, sleep: 7, meals: 3, exercise: 30 };
     
@@ -108,17 +117,17 @@ function WellnessDashboard() {
   };
 
   const getMonthlyAverage = (metric) => {
-    const data = wellnessData[metric];
+    const data = metricData[metric];
     const sum = data.reduce((acc, day) => acc + day.value, 0);
     return (sum / data.length).toFixed(1);
   };
 
   const getWeeklyData = (metric) => {
-    return wellnessData[metric].slice(-7);
+    return metricData[metric].slice(-7);
   };
 
   const getMonthlyPieData = (metric) => {
-    const data = wellnessData[metric];
+    const data = metricData[metric];
     const targets = { water: 8, sleep: 7, meals: 3, exercise: 30 };
     const target = targets[metric];
     const metTarget = data.filter(day => day.value >= target).length;
@@ -130,127 +139,143 @@ function WellnessDashboard() {
   };
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-container">
-        <h1 className="dashboard-title">Wellness Dashboard</h1>
-
-        <div className="metric-buttons">
-          {['water', 'sleep', 'meals', 'exercise'].map((metric) => (
-            <button
-              key={metric}
-              className={`metric-button ${activeMetric === metric ? 'active' : ''}`}
-              onClick={() => setActiveMetric(metric)}
-              style={{
-                '--button-color': PASTEL_COLORS[metric]
-              }}
-            >
-              {getMetricIcon(metric)}
-            </button>
-          ))}
-        </div>
-
-        <div className="dashboard-grid">
-          <div className="card">
-            <div className="card-content">
-              <h2 className="card-title">Weekly Progress</h2>
-              <div className="weekly-chart">
-                {getWeeklyData(activeMetric).map((day, index) => (
-                  <div key={index} className="bar-container">
-                    <div className="bar-wrapper">
-                      <div 
-                        className="bar-fill"
-                        style={{
-                          height: `${(day.value / Math.max(...getWeeklyData(activeMetric).map(d => d.value))) * 100}%`,
-                          backgroundColor: PASTEL_COLORS[activeMetric]
-                        }}
-                      ></div>
-                    </div>
-                    <span className="bar-label">{day.date.slice(-2)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-content">
-              <h2 className="card-title">Monthly Progress</h2>
-              <div className="pie-chart">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={getMonthlyPieData(activeMetric)}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      fill={PASTEL_COLORS[activeMetric]}
-                      dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      <Cell key="cell-0" fill={PASTEL_COLORS[activeMetric]} />
-                      <Cell key="cell-1" fill="#E0E0E0" />
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-content">
-              <h2 className="card-title">Current Streak</h2>
-              <div className="streak-container">
-                <div className="streak-icons">
-                  {getStreakIcons(activeMetric, getStreakCount(activeMetric))}
-                </div>
-                <div className="streak-count">{getStreakCount(activeMetric)} days</div>
-                <div className="streak-message">
-                  Keep up your {activeMetric} streak!
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-content">
-              <h2 className="card-title">Monthly Average</h2>
-              <div className="average-container">
-                <div 
-                  className="average-value"
-                  style={{ color: PASTEL_COLORS[activeMetric] }}
-                >
-                  {getMonthlyAverage(activeMetric)}
-                </div>
-                <div className="average-unit">
-                  {getMetricUnit(activeMetric)} per day
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="card overview-card">
-          <div className="card-content">
-            <h2 className="card-title">Overview</h2>
-            <div className="overview-grid">
-              {['water', 'sleep', 'meals', 'exercise'].map((metric) => (
-                <div key={metric} className="overview-item">
-                  <div 
-                    className="overview-icon"
-                    style={{ backgroundColor: PASTEL_COLORS[metric] }}
-                  >
-                    {getMetricIcon(metric)}
-                  </div>
-                  <div className="overview-metric">{metric.charAt(0).toUpperCase() + metric.slice(1)}</div>
-                  <div className="overview-value">{getMonthlyAverage(metric)}</div>
-                  <div className="overview-unit">{getMetricUnit(metric)} per day</div>
-                </div>
+    <>
+      {Object.entries(metricData).map(([metric, values]) => (
+        <div key={metric} style={{ marginBottom: '1rem' }}>
+          <h3>{metric.charAt(0).toUpperCase() + metric.slice(1)}</h3>
+          {values.length > 0 ? (
+            <ul>
+              {values.map((value, index) => (
+                <li key={index}>{value}</li>
               ))}
-            </div>
-          </div>
+            </ul>
+          ) : (
+            <p>No data available</p>
+          )}
         </div>
-      </div>
-    </div>
+      ))}
+    </>
+    // <div className="dashboard">
+    //   <div className="dashboard-container">
+    //     <h1 className="dashboard-title">Wellness Dashboard</h1>
+
+    //     <div className="metric-buttons">
+    //       {['water', 'sleep', 'meals', 'exercise'].map((metric) => (
+    //         <button
+    //           key={metric}
+    //           className={`metric-button ${activeMetric === metric ? 'active' : ''}`}
+    //           onClick={() => setActiveMetric(metric)}
+    //           style={{
+    //             '--button-color': PASTEL_COLORS[metric]
+    //           }}
+    //         >
+    //           {getMetricIcon(metric)}
+    //         </button>
+    //       ))}
+    //     </div>
+
+    //     <div className="dashboard-grid">
+    //       <div className="card">
+    //         <div className="card-content">
+    //           <h2 className="card-title">Weekly Progress</h2>
+    //           <div className="weekly-chart">
+    //             {getWeeklyData(activeMetric).map((day, index) => (
+    //               <div key={index} className="bar-container">
+    //                 <div className="bar-wrapper">
+    //                   <div 
+    //                     className="bar-fill"
+    //                     style={{
+    //                       height: `${(day.value / Math.max(...getWeeklyData(activeMetric).map(d => d.value))) * 100}%`,
+    //                       backgroundColor: PASTEL_COLORS[activeMetric]
+    //                     }}
+    //                   ></div>
+    //                 </div>
+    //                 <span className="bar-label">{day.date.slice(-2)}</span>
+    //               </div>
+    //             ))}
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       <div className="card">
+    //         <div className="card-content">
+    //           <h2 className="card-title">Monthly Progress</h2>
+    //           <div className="pie-chart">
+    //             <ResponsiveContainer width="100%" height="100%">
+    //               <PieChart>
+    //                 <Pie
+    //                   data={getMonthlyPieData(activeMetric)}
+    //                   cx="50%"
+    //                   cy="50%"
+    //                   outerRadius={80}
+    //                   fill={PASTEL_COLORS[activeMetric]}
+    //                   dataKey="value"
+    //                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+    //                 >
+    //                   <Cell key="cell-0" fill={PASTEL_COLORS[activeMetric]} />
+    //                   <Cell key="cell-1" fill="#E0E0E0" />
+    //                 </Pie>
+    //               </PieChart>
+    //             </ResponsiveContainer>
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       <div className="card">
+    //         <div className="card-content">
+    //           <h2 className="card-title">Current Streak</h2>
+    //           <div className="streak-container">
+    //             <div className="streak-icons">
+    //               {getStreakIcons(activeMetric, getStreakCount(activeMetric))}
+    //             </div>
+    //             <div className="streak-count">{getStreakCount(activeMetric)} days</div>
+    //             <div className="streak-message">
+    //               Keep up your {activeMetric} streak!
+    //             </div>
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       <div className="card">
+    //         <div className="card-content">
+    //           <h2 className="card-title">Monthly Average</h2>
+    //           <div className="average-container">
+    //             <div 
+    //               className="average-value"
+    //               style={{ color: PASTEL_COLORS[activeMetric] }}
+    //             >
+    //               {getMonthlyAverage(activeMetric)}
+    //             </div>
+    //             <div className="average-unit">
+    //               {getMetricUnit(activeMetric)} per day
+    //             </div>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </div>
+
+    //     <div className="card overview-card">
+    //       <div className="card-content">
+    //         <h2 className="card-title">Overview</h2>
+    //         <div className="overview-grid">
+    //           {['water', 'sleep', 'meals', 'exercise'].map((metric) => (
+    //             <div key={metric} className="overview-item">
+    //               <div 
+    //                 className="overview-icon"
+    //                 style={{ backgroundColor: PASTEL_COLORS[metric] }}
+    //               >
+    //                 {getMetricIcon(metric)}
+    //               </div>
+    //               <div className="overview-metric">{metric.charAt(0).toUpperCase() + metric.slice(1)}</div>
+    //               <div className="overview-value">{getMonthlyAverage(metric)}</div>
+    //               <div className="overview-unit">{getMetricUnit(metric)} per day</div>
+    //             </div>
+    //           ))}
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
 
